@@ -691,27 +691,27 @@ RtAudio::DeviceInfo RtApiCore :: getDeviceInfo( unsigned int device )
   info.name.erase();
   CFStringRef cfname;
   dataSize = sizeof( CFStringRef );
-  property.mSelector = kAudioObjectPropertyManufacturer;
-  result = AudioObjectGetPropertyData( id, &property, 0, NULL, &dataSize, &cfname );
-  if ( result != noErr ) {
-    errorStream_ << "RtApiCore::probeDeviceInfo: system error (" << getErrorCode( result ) << ") getting device manufacturer.";
-    errorText_ = errorStream_.str();
-    error( RtAudioError::WARNING );
-    return info;
-  }
+//   property.mSelector = kAudioObjectPropertyManufacturer;
+//   result = AudioObjectGetPropertyData( id, &property, 0, NULL, &dataSize, &cfname );
+//   if ( result != noErr ) {
+//     errorStream_ << "RtApiCore::probeDeviceInfo: system error (" << getErrorCode( result ) << ") getting device manufacturer.";
+//     errorText_ = errorStream_.str();
+//     error( RtAudioError::WARNING );
+//     return info;
+//   }
 
-  //const char *mname = CFStringGetCStringPtr( cfname, CFStringGetSystemEncoding() );
-  int length = CFStringGetLength(cfname);
-  char *mname = (char *)malloc(length * 3 + 1);
-#if defined( UNICODE ) || defined( _UNICODE )
-  CFStringGetCString(cfname, mname, length * 3 + 1, kCFStringEncodingUTF8);
-#else
-  CFStringGetCString(cfname, mname, length * 3 + 1, CFStringGetSystemEncoding());
-#endif
-  info.name.append( (const char *)mname, strlen(mname) );
-  info.name.append( ": " );
-  CFRelease( cfname );
-  free(mname);
+//   //const char *mname = CFStringGetCStringPtr( cfname, CFStringGetSystemEncoding() );
+//   int length = CFStringGetLength(cfname);
+//   char *mname = (char *)malloc(length * 3 + 1);
+// #if defined( UNICODE ) || defined( _UNICODE )
+//   CFStringGetCString(cfname, mname, length * 3 + 1, kCFStringEncodingUTF8);
+// #else
+//   CFStringGetCString(cfname, mname, length * 3 + 1, CFStringGetSystemEncoding());
+// #endif
+//   info.name.append( (const char *)mname, strlen(mname) );
+//   info.name.append( ": " );
+//   CFRelease( cfname );
+//   free(mname);
 
   property.mSelector = kAudioObjectPropertyName;
   result = AudioObjectGetPropertyData( id, &property, 0, NULL, &dataSize, &cfname );
@@ -722,6 +722,7 @@ RtAudio::DeviceInfo RtApiCore :: getDeviceInfo( unsigned int device )
     return info;
   }
 
+  int length;
   //const char *name = CFStringGetCStringPtr( cfname, CFStringGetSystemEncoding() );
   length = CFStringGetLength(cfname);
   char *name = (char *)malloc(length * 3 + 1);
