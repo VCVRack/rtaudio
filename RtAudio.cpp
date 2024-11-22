@@ -76,7 +76,7 @@ std::string convertCharPointerToStdString(const wchar_t* text)
 {
   if (!text)
     return std::string();
-#if defined(_MSC_VER)
+#if defined(_WIN32)
   const int wchars = (int)wcslen(text);
   // how many characters are required after conversion?
   const int nchars = WideCharToMultiByte(CP_UTF8, 0, text, wchars, 0, 0, 0, 0);
