@@ -1228,25 +1228,8 @@ bool RtApiCore :: probeDeviceInfo( AudioDeviceID id, RtAudio::DeviceInfo& info )
   AudioObjectPropertyAddress property = { kAudioObjectPropertyManufacturer,
                                           kAudioObjectPropertyScopeGlobal,
                                           KAUDIOOBJECTPROPERTYELEMENT };
-  OSStatus result = AudioObjectGetPropertyData( id, &property, 0, NULL, &dataSize, &cfname );
-  if ( result != noErr ) {
-    errorStream_ << "RtApiCore::probeDeviceInfo: system error (" << getErrorCode( result ) << ") getting device manufacturer.";
-    errorText_ = errorStream_.str();
-    error( RTAUDIO_WARNING );
-    return false;
-  }
-
-  long length = CFStringGetLength(cfname);
-  char *mname = (char *)malloc(length * 3 + 1);
-#if defined( UNICODE ) || defined( _UNICODE )
-  CFStringGetCString(cfname, mname, length * 3 + 1, kCFStringEncodingUTF8);
-#else
-  CFStringGetCString(cfname, mname, length * 3 + 1, CFStringGetSystemEncoding());
-#endif
-  info.name.append( (const char *)mname, strlen(mname) );
-  info.name.append( ": " );
-  CFRelease( cfname );
-  free(mname);
+  OSStatus result;
+  long length;
 
   property.mSelector = kAudioObjectPropertyName;
   result = AudioObjectGetPropertyData( id, &property, 0, NULL, &dataSize, &cfname );
